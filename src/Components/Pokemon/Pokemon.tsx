@@ -6,14 +6,8 @@ import './Pokemon.css'
 
 
 const Pokemon = () => {
-    const [pokemon, setPokemon] = useState([{
-        img: '',
-        name: '',
-        is_baby: true,
-        hp: 0,
-        attack: 0,
-        height: 0
-    }])
+    const [pokemon, setPokemon] = useState<IRow[]>([])
+
 
     const pokeFetch = async (i: number) => {
         const info = await axios.get<AxiosRequestConfig, AxiosResponse>(`pokemon/${i}`)
@@ -21,27 +15,30 @@ const Pokemon = () => {
         const img = Object.keys(info.data.sprites.other).map(element => {
             return info.data.sprites.other[element].front_default
         })
-        const pokeObj: IRow[] = [{
-            img: img[2],
-            name: info.data.name,
-            is_baby: about.data.chain.is_baby,
-            hp: info.data.stats[0].base_stat,
-            attack: info.data.stats[1].base_stat,
-            height: info.data.height
-        }]
-        setPokemon(pokeObj)
+
+        return {info, about, img}
     }
 
-    useEffect(() => {
-        for(let i = 1; i <= 25; i++) {
-            pokeFetch(i)
-            console.log(i)
+    const click = async (): Promise<void> => {
+        const copyArr = [...pokemon]
+        for(let i = 1; i < 60; i++) {
+            const pokeObj = {
+                img: await pokeFetch(i).then(res => res.img[1]),
+                name: await pokeFetch(i).then(res => res.info.data.name),
+                is_baby: await pokeFetch(i).then(res => res.about.data.chain.is_baby),
+                hp: await pokeFetch(i).then(res => res.info.data.stats[0].base_stat),
+                attack: await pokeFetch(i).then(res => res.info.data.stats[1].base_stat),
+                height: await pokeFetch(i).then(res => res.info.data.height)
+            }
+            copyArr.push(pokeObj)
         }
-    }, [])
-
+        console.log(copyArr)
+        setPokemon(copyArr)
+    }
 
     return (
         <div className='tab'>
+            <button onClick={() => click()}>Show Pokemon</button>
             <div className='headTab'>
                 <h3>Image</h3>
                 <h3>Name</h3>
@@ -66,13 +63,3 @@ const Pokemon = () => {
 }
 
 export default Pokemon
-
-
-// {
-//     img: '',
-//         name: '',
-//     is_baby: true,
-//     hp: 0,
-//     attack: 0,
-//     height: 0
-// }

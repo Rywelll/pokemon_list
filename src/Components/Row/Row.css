@@ -11,3 +11,8 @@
     background: rgba(14, 128, 199, 0.58);
 }
 
+.size {
+    width: 100px;
+    height: auto;
+    text-transform: capitalize;
+}

@@ -14,12 +14,12 @@ export interface IRow {
 const Row = ({img, name, hp, attack, height, is_baby}: IRow) => {
     return (
         <div className='row'>
-            <img src={img} alt="picture"/>
-            <h3>{name}</h3>
-            <p>{is_baby ? 'Baby' : 'Adult' }</p>
-            <p>health point: {hp}</p>
-            <p>attack: {attack}</p>
-            <p>height: {height}</p>
+            <img className='size' src={img} alt="pokemon"/>
+            <h3 className='size'>{name}</h3>
+            <p className='size'>{is_baby ? 'Baby' : 'Adult' }</p>
+            <p className='size'>health point: {hp}</p>
+            <p className='size'>attack: {attack}</p>
+            <p className='size'>height: {height}</p>
         </div>
     )
 }

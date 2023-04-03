@@ -1,7 +1,6 @@
 .tab {
     display: flex;
     flex-direction: column;
-
     width: 900px;
     margin: 50px;
     padding: 15px;
