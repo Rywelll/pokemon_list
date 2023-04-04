@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from '../../api/axios'
 import {AxiosRequestConfig, AxiosResponse} from "axios";
 import Row, {IRow} from "../../Components/Row/Row";
@@ -7,6 +7,7 @@ import './Pokemon.css'
 
 const Pokemon = () => {
     const [pokemon, setPokemon] = useState<IRow[]>([])
+    const [isFilter, setIsFilter] = useState<IRow[]>([])
 
 
     const pokeFetch = async (i: number) => {
@@ -18,8 +19,7 @@ const Pokemon = () => {
 
         return {info, about, img}
     }
-
-    const click = async (): Promise<void> => {
+    const showPokemon = async (): Promise<void> => {
         const copyArr = [...pokemon]
         for(let i = 1; i < 60; i++) {
             const pokeObj = {
@@ -32,9 +32,15 @@ const Pokemon = () => {
             }
             copyArr.push(pokeObj)
         }
-        console.log(copyArr)
         setPokemon(copyArr)
+        setIsFilter(copyArr)
     }
+
+    useEffect(() => {
+        showPokemon()
+
+    }, [])
+
     const sortA = {
         name: () => {
             const copyPokemon = [...pokemon]
@@ -89,12 +95,48 @@ const Pokemon = () => {
             copyPokemon.sort((a, b) => b.height - a.height)
             setPokemon(copyPokemon)
         }
+    }
+    const filter = {
+        all:  () => {
+            const copyPokemon = [...isFilter]
+            setPokemon(copyPokemon)
+        },
+        is_baby: () => {
+            const copyPokemon = [...isFilter]
+            const is_baby = copyPokemon.filter(age => age.is_baby === true)
+            setPokemon(is_baby)
+        },
+        adult: () => {
+            const copyPokemon = [...isFilter]
+            const adult = copyPokemon.filter(age => age.is_baby === false)
+            setPokemon(adult)
+        },
+        minAttack: () => {
+            const copyPokemon = [...isFilter]
+            const copyFilt = [...pokemon]
+            const minAttack = copyPokemon.filter(attack => attack.attack < 50)
+            const minAttackFilt = copyFilt.filter(attack => attack.attack < 50)
+            setPokemon(minAttack)
+            setPokemon(minAttackFilt)
+        },
+        maxAttack: () => {
+            const copyPokemon = [...isFilter]
+            const copyFilt = [...pokemon]
+            const maxAttack = copyPokemon.filter(attack => attack.attack > 100)
+            const minAttackFilt = copyFilt.filter(attack => attack.attack > 100)
+            setPokemon(maxAttack)
+            setPokemon(minAttackFilt)
+        },
 
     }
     return (
         <div className='tab'>
-            <div className='showBtn'>
-                <button onClick={() => click()}>Show Pokemon</button>
+            <div className='filter'>
+                <button onClick={() => filter.all()}>All</button>
+                <button onClick={() => filter.is_baby()}>Baby</button>
+                <button onClick={() => filter.adult()}>Adult</button>
+                <button onClick={() => filter.minAttack()}>Min Attack</button>
+                <button onClick={() => filter.maxAttack()}>Max Attack</button>
             </div>
             <div className='headTab'>
                 <h3>Image</h3>
