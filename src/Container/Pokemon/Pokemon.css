@@ -1,6 +1,6 @@
 .tab {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     width: 900px;
     margin: 50px;
     padding: 15px;
@@ -8,8 +8,18 @@
     border-radius: 5px;
 }
 .headTab {
+    width: 900px;
+    padding: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+}
+.showBtn {
+    margin: 0 auto;
+}
+
+.sort {
+    display: flex;
     align-items: center;
 }
